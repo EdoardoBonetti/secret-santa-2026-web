@@ -163,19 +163,37 @@
     (function () {
       const snow = document.getElementById('snow');
       const snowChars = ['❄', '❅', '❆', '•'];
-      const N = 42;
+      // Classic yellow-oval Batman emblem image.
+      const batSvg = (sizeRem) =>
+        `<img src="assets/batman.png" alt="" style="width:${sizeRem}rem;height:auto;display:block;` +
+        `filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))">`;
+      const N = 46;
       let html = '';
       for (let i = 0; i < N; i++) {
         const left = Math.random() * 100;
         const dur = 6 + Math.random() * 9;
         const delay = -Math.random() * 12;
-        // ~30% of the falling things are little T-Rexes 🦖, the rest snowflakes.
-        const isDino = Math.random() < 0.3;
-        const ch = isDino ? '🦖' : snowChars[(Math.random() * snowChars.length) | 0];
-        const size = isDino ? 2.2 + Math.random() * 1.8 : 1.1 + Math.random() * 1.7;
-        const op = isDino ? 0.6 + Math.random() * 0.35 : 0.35 + Math.random() * 0.5;
-        html += `<i style="left:${left}vw;font-size:${size}rem;opacity:${op};` +
-                `animation-duration:${dur}s;animation-delay:${delay}s">${ch}</i>`;
+        // ~12% Batman emblem, then ~30% of the rest are T-Rexes 🦖, else snow.
+        const roll = Math.random();
+        const isBat = roll < 0.12;
+        const isDino = !isBat && roll < 0.12 + 0.26;
+        let content, size, op;
+        if (isBat) {
+          size = 1.8 + Math.random() * 1.8;
+          op = 0.75 + Math.random() * 0.25;
+          content = batSvg(size);
+        } else if (isDino) {
+          size = 2.2 + Math.random() * 1.8;
+          op = 0.6 + Math.random() * 0.35;
+          content = '🦖';
+        } else {
+          size = 1.1 + Math.random() * 1.7;
+          op = 0.35 + Math.random() * 0.5;
+          content = snowChars[(Math.random() * snowChars.length) | 0];
+        }
+        const fs = isBat ? '' : `font-size:${size}rem;`;
+        html += `<i style="left:${left}vw;${fs}opacity:${op};` +
+                `animation-duration:${dur}s;animation-delay:${delay}s">${content}</i>`;
       }
       snow.innerHTML = html;
     })();
