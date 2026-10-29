@@ -163,36 +163,27 @@
     (function () {
       const snow = document.getElementById('snow');
       const snowChars = ['❄', '❅', '❆', '•'];
-      // Classic yellow-oval Batman emblem image.
-      const batSvg = (sizeRem) =>
-        `<img src="assets/batman.png" alt="" style="width:${sizeRem}rem;height:auto;display:block;` +
-        `filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))">`;
+      // Family theme: boy, girl, father, mother.
+      const themed = ['👦', '👧', '👨', '👩'];
       const N = 46;
       let html = '';
       for (let i = 0; i < N; i++) {
         const left = Math.random() * 100;
         const dur = 6 + Math.random() * 9;
         const delay = -Math.random() * 12;
-        // ~12% Batman emblem, then ~30% of the rest are T-Rexes 🦖, else snow.
-        const roll = Math.random();
-        const isBat = roll < 0.12;
-        const isDino = !isBat && roll < 0.12 + 0.26;
+        // ~35% themed emoji, else snow.
+        const isThemed = Math.random() < 0.35;
         let content, size, op;
-        if (isBat) {
-          size = 1.8 + Math.random() * 1.8;
-          op = 0.75 + Math.random() * 0.25;
-          content = batSvg(size);
-        } else if (isDino) {
-          size = 2.2 + Math.random() * 1.8;
-          op = 0.6 + Math.random() * 0.35;
-          content = '🦖';
+        if (isThemed) {
+          size = 1.8 + Math.random() * 1.6;
+          op = 0.78 + Math.random() * 0.22;
+          content = themed[(Math.random() * themed.length) | 0];
         } else {
           size = 1.1 + Math.random() * 1.7;
           op = 0.35 + Math.random() * 0.5;
           content = snowChars[(Math.random() * snowChars.length) | 0];
         }
-        const fs = isBat ? '' : `font-size:${size}rem;`;
-        html += `<i style="left:${left}vw;${fs}opacity:${op};` +
+        html += `<i style="left:${left}vw;font-size:${size}rem;opacity:${op};` +
                 `animation-duration:${dur}s;animation-delay:${delay}s">${content}</i>`;
       }
       snow.innerHTML = html;
